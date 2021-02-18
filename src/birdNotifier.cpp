@@ -12,6 +12,7 @@
 #include <sstream>
 #include <filesystem>
 #include <iomanip>
+#include <cassert>
 
 bool BirdNotifier::Run()
 {
@@ -97,7 +98,15 @@ bool BirdNotifier::ParseReportedObservationLine(const std::string& line, Reporte
 
 void BirdNotifier::UpdateProcessedObservations(std::vector<ReportedObservation>& processedObservations, const std::vector<EBirdInterface::ObservationInfo>& observations)
 {
-	// TODO:  Remove observations from the list if the date is 2*daysBack or greater
+	const auto removeBefore(std::chrono::system_clock::now() - std::chrono::hours(config.daysBack * 24));
+	auto isOldEnoughToRemove([&removeBefore](const ReportedObservation& ro)
+	{
+		std::chrono::system_clock::time_point tp;
+		const auto ok(DateStringToTimePoint(ro.observationDate, tp));
+		assert(ok && "date/time conversion failed");
+		return tp < removeBefore;
+	});
+	processedObservations.erase(std::remove_if(processedObservations.begin(), processedObservations.end(), isOldEnoughToRemove), processedObservations.end());
 
 	for (const auto& newO : observations)
 	{
@@ -106,6 +115,49 @@ void BirdNotifier::UpdateProcessedObservations(std::vector<ReportedObservation>&
 		ro.observationDate = UString::ToNarrowString(BuildTimeString(newO.observationDate, newO.dateIncludesTimeInfo));
 		processedObservations.push_back(ro);
 	}
+}
+
+bool BirdNotifier::DateStringToTimePoint(const std::string& s, std::chrono::system_clock::time_point& tp)
+{
+	// Format is expected to be: %m/%D/%Y %H:%M
+	std::istringstream ss(s);
+	std::tm t{};
+	if (!ExtractAndParseDateToken(ss, '/', t.tm_mon, "month") ||
+		!ExtractAndParseDateToken(ss, '/', t.tm_mday, "day") ||
+		!ExtractAndParseDateToken(ss, ' ', t.tm_year, "year"))
+		return false;
+
+	t.tm_year -= 1900;
+	t.tm_mon -= 1;
+
+	if (!ss.eof())// If there's time information in addition to the date
+	{
+		if (!ExtractAndParseDateToken(ss, ':', t.tm_hour, "hour") ||
+			!ExtractAndParseDateToken(ss, '\0', t.tm_min, "minute"))
+			return false;
+	}
+
+	tp = std::chrono::system_clock::from_time_t(std::mktime(&t));
+	return true;
+}
+
+bool BirdNotifier::ExtractAndParseDateToken(std::istringstream& ss, const char& seperator, int& value, const std::string& fieldName)
+{
+	std::string token;
+	if (!std::getline(ss, token, seperator))
+	{
+		std::cerr << "Failed to extract " << fieldName << '\n';
+		return false;
+	}
+
+	std::istringstream tokenStream(token);
+	if ((tokenStream >> value).fail())
+	{
+		std::cerr << "Failed to parse " << fieldName << '\n';
+		return false;
+	}
+
+	return true;
 }
 
 bool BirdNotifier::WritePreviousObservations(const std::vector<ReportedObservation>& observations)
@@ -179,7 +231,7 @@ void BirdNotifier::ExcludeObservations(std::vector<EBirdInterface::ObservationIn
 	auto observationIsInList([&exclude](const EBirdInterface::ObservationInfo& o) {
 		for (const auto& e : exclude)
 		{
-			if (o.observationID == UString::ToStringType( e.observationDate))
+			if (o.observationID == UString::ToStringType(e.observationId))
 				return true;
 		}
 		return false;

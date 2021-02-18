@@ -11,6 +11,9 @@
 #include "eBirdInterface.h"
 #include "email/emailSender.h"
 
+// Standard C++ headers
+#include <chrono>
+
 class BirdNotifier
 {
 public:
@@ -39,6 +42,8 @@ private:
 	static void ExcludeObservations(std::vector<EBirdInterface::ObservationInfo>& observations, const std::vector<ReportedObservation>& exclude);
 
 	static UString::String BuildTimeString(const std::tm& dateTime, const bool& includeTime);
+	static bool DateStringToTimePoint(const std::string& s, std::chrono::system_clock::time_point& tp);
+	static bool ExtractAndParseDateToken(std::istringstream& ss, const char& seperator, int& value, const std::string& fieldName);
 };
 
 #endif// BIRD_NOTIFIER_H_
