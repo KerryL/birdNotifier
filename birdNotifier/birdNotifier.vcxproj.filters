@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\email">
+      <UniqueIdentifier>{7393dbab-c2e7-4fe8-a7cc-bbcd73cd2242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utilities">
+      <UniqueIdentifier>{c0da6634-a7cd-4b0a-86de-9057aac1727a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\email">
+      <UniqueIdentifier>{6ca03f96-e910-4cbe-8ca5-7c820a979622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utilities">
+      <UniqueIdentifier>{d5de8dd2-aedb-423b-98e6-3a8026b1d52a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\email\cJSON">
+      <UniqueIdentifier>{75f6b401-bc09-4974-8ac3-ea67e97cd42c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\email\cJSON">
+      <UniqueIdentifier>{3a798738-9b88-4596-980b-54dbe51cde33}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\birdNotifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\birdNotifierApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\birdNotifierConfigFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\eBirdInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\cJSON\cJSON.c">
+      <Filter>Source Files\email\cJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\cJSON\cJSON_Utils.c">
+      <Filter>Source Files\email\cJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\curlUtilities.cpp">
+      <Filter>Source Files\email</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\emailSender.cpp">
+      <Filter>Source Files\email</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\jsonInterface.cpp">
+      <Filter>Source Files\email</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\email\oAuth2Interface.cpp">
+      <Filter>Source Files\email</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utilities\configFile.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utilities\uString.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utilities\cppSocket.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\birdNotifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\birdNotifierConfigFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\eBirdInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\curlUtilities.h">
+      <Filter>Header Files\email</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\emailSender.h">
+      <Filter>Header Files\email</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\jsonInterface.h">
+      <Filter>Header Files\email</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\oAuth2Interface.h">
+      <Filter>Header Files\email</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\cJSON\cJSON.h">
+      <Filter>Header Files\email\cJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\email\cJSON\cJSON_Utils.h">
+      <Filter>Header Files\email\cJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utilities\configFile.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utilities\uString.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\birdNotifierConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utilities\cppSocket.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

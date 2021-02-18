@@ -1,0 +1,3 @@
+birdNotifier
+
+This application is intended to be launched on a periodic basis by a 3rd party service (i.e. chron).  Each time it is launched, it checks for recent "notable" observations from eBird and compares those observations to a list of observations that were previously processed.  If any new observations exist, it sends an email with details of the new observations to the configured recipients.

@@ -1,0 +1,21 @@
+Build instructions for OpenSSL
+
+Guidance from:
+https://stackoverflow.com/questions/45494630/how-to-build-openssl-on-windows-with-visual-studio-2017/45495686
+and
+https://stackoverflow.com/questions/50365513/building-a-static-version-of-openssl-library-using-md-switch
+
+1.  Clone the OpenSSL git repository
+2.  Checkout the appropriate version (failure to do this will compile HEAD, which may be unstable)
+3.  Install Strawberry Perl
+4.  Install NASM
+5.  Add NASM to PATH (Strawberry Perl added iteself to PATH upon install)
+6.  Launch the Visual Studio Command Prompt (64-bit) by bringing up the Start Menu and typing "x64 Native Tools ...".  Be sure to launch as administrator.
+7.  Navigate to the root OpenSSL directory
+8.  Configure using:
+    perl Configure VC-WIN64A --prefix="D:/lib/openssl/" --openssldir="D:/lib/openssl/" no-shared
+    (Note use of forward slashes in path specification)
+9.  Verify correct MSCRT was selected by opening "makefile" in root OpenSSL directory and checking contents of LIB_CFLAGS variable (I checked to make sure it had /MT)
+10.  Execute "nmake"
+11. Exectue "nmake test"
+12. Execute "nmake install"
