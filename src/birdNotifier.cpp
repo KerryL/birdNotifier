@@ -191,7 +191,14 @@ std::string BirdNotifier::BuildMessageBody(const std::vector<EBirdInterface::Obs
 {
 	UString::OStringStream ss;
 	for (const auto& o : observations)
-		ss << "<p><b>" << o.commonName << "</b> (" << o.count << "), " << BuildTimeString(o.observationDate, o.dateIncludesTimeInfo) << ", " << o.locationName << ", " << o.userName << " -- https://ebird.org/checklist/" << o.checklistID << "</p>";
+	{
+		ss << "<p><b>" << o.commonName << "</b> (";
+		if (o.presenceNoted)
+			ss << "X";
+		else
+			ss << o.count;
+		ss << "), " << BuildTimeString(o.observationDate, o.dateIncludesTimeInfo) << ", " << o.locationName << ", " << o.userName << " -- https://ebird.org/checklist/" << o.checklistID << "</p>";
+	}
 
 	return UString::ToNarrowString(ss.str());
 }

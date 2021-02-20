@@ -26,6 +26,7 @@ public:
 		UString::String commonName;
 		UString::String scientificName;
 		std::tm observationDate;
+		bool presenceNoted;
 		unsigned int count;
 		UString::String locationID;
 		bool isNotHotspot;
@@ -61,6 +62,7 @@ private:
 	static const UString::String locationIDTag;
 	static const UString::String locationNameTag;
 	static const UString::String howManyTag;
+	static const UString::String presenceNotedTag;
 	static const UString::String latitudeTag;
 	static const UString::String longitudeTag;
 	static const UString::String countryCodeTag;

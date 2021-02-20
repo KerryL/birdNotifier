@@ -14,6 +14,7 @@
 #include <map>
 #include <cassert>
 #include <iomanip>
+#include <iostream>
 
 const UString::String EBirdInterface::apiRoot(_T("https://api.ebird.org/v2/"));
 const UString::String EBirdInterface::observationDataPath(_T("data/obs/"));
@@ -29,6 +30,7 @@ const UString::String EBirdInterface::submissionIDTag(_T("subID"));
 const UString::String EBirdInterface::latitudeTag(_T("lat"));
 const UString::String EBirdInterface::longitudeTag(_T("lng"));
 const UString::String EBirdInterface::howManyTag(_T("howMany"));
+const UString::String EBirdInterface::presenceNotedTag(_T("presenceNoted"));
 const UString::String EBirdInterface::countryCodeTag(_T("countryCode"));
 const UString::String EBirdInterface::subnational1CodeTag(_T("subnational1Code"));
 const UString::String EBirdInterface::subnational2CodeTag(_T("subnational2Code"));
@@ -90,6 +92,7 @@ bool EBirdInterface::GetRecentNotableObservations(const UString::String& regionC
 
 		if (!ReadJSONObservationData(item, o))
 		{
+			std::cout << cJSON_Print(root);
 			cJSON_Delete(root);
 			return false;
 		}
@@ -158,10 +161,19 @@ bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 		info.dateIncludesTimeInfo = false;
 	}
 
-	if (!ReadJSON(item, howManyTag, info.count))
+	if (!ReadJSON(item, presenceNotedTag, info.presenceNoted))
 	{
-		Cerr << "Failed to get observation count\n";
+		Cerr << "Failed to read presence noted tag\n";
 		return false;
+	}
+
+	if (!info.presenceNoted)
+	{
+		if (!ReadJSON(item, howManyTag, info.count))
+		{
+			Cerr << "Failed to get observation count\n";
+			return false;
+		}
 	}
 
 	if (!ReadJSON(item, latitudeTag, info.latitude))
