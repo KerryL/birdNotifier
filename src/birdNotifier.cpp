@@ -14,6 +14,12 @@
 #include <iomanip>
 #include <cassert>
 
+#ifdef _WIN32
+	namespace fs = std::experimental::filesystem;
+#else
+	namespace fs = std::filesystem;
+#endif// _WIN32
+
 bool BirdNotifier::Run()
 {
 	std::cout << "Reading previously processed observations..." << std::endl;
@@ -56,7 +62,7 @@ bool BirdNotifier::ReadPreviousObservations(std::vector<ReportedObservation>& ob
 		return true;
 
 	// If the file doesn't exist, don't treat is as an error because it wouldn't have been written yet on first execution of the application
-	if (!std::experimental::filesystem::exists(config.alreadyNotifiedFile))
+	if (!fs::exists(config.alreadyNotifiedFile))
 		return true;
 
 	std::ifstream file(config.alreadyNotifiedFile);
