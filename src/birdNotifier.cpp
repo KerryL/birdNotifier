@@ -189,7 +189,8 @@ bool BirdNotifier::SendNotification(const std::vector<EBirdInterface::Observatio
 	EmailSender::LoginInfo loginInfo;
 	std::vector<EmailSender::AddressInfo> recipients;
 	BuildEmailEssentials(loginInfo, recipients);
-	EmailSender sender("birdNotifier Message", BuildMessageBody(observations), std::string(), recipients, loginInfo, true, false, Cout);
+	constexpr bool verbose(false);
+	EmailSender sender("birdNotifier Message", BuildMessageBody(observations), std::string(), recipients, loginInfo, true, verbose, Cout);
 	return sender.Send();
 }
 
