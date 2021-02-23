@@ -17,11 +17,12 @@
 class BirdNotifier
 {
 public:
-	explicit BirdNotifier(const BirdNotifierConfig& config) : config(config) {}
+	explicit BirdNotifier(const BirdNotifierConfig& config, UString::OStream& log) : config(config), log(log) {}
 	bool Run();
 
 private:
 	const BirdNotifierConfig config;
+	UString::OStream& log;
 
 	struct ReportedObservation
 	{

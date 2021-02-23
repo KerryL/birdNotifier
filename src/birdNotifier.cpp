@@ -22,13 +22,13 @@
 
 bool BirdNotifier::Run()
 {
-	std::cout << "Reading previously processed observations..." << std::endl;
+	log << "Reading previously processed observations..." << std::endl;
 	std::vector<ReportedObservation> previouslyProcessedObservations;
 	if (!ReadPreviousObservations(previouslyProcessedObservations))
 		return false;
 
-	std::cout << "Checking for recent observations..." << std::endl;
-	EBirdInterface ebi(UString::ToStringType(config.eBirdAPIKey));
+	log << "Checking for recent observations..." << std::endl;
+	EBirdInterface ebi(UString::ToStringType(config.eBirdAPIKey), log);
 	std::vector<EBirdInterface::ObservationInfo> observations;
 	if (!ebi.GetRecentNotableObservations(UString::ToStringType(config.regionCode), config.daysBack, observations))
 		return false;
@@ -36,19 +36,19 @@ bool BirdNotifier::Run()
 	// For some reason, the eBird list of notable sightings tends to include multiple instances of same observation
 	observations.erase(std::unique(observations.begin(), observations.end()), observations.end());
 
-	std::cout << "Tailoring observation list..." << std::endl;
+	log << "Tailoring observation list..." << std::endl;
 	ExcludeSpecies(observations, config.excludeSpecies);
 	ExcludeObservations(observations, previouslyProcessedObservations);
-	std::cout << "There are " << observations.size() << " new observations" << std::endl;
+	log << "There are " << observations.size() << " new observations" << std::endl;
 
 	if (!observations.empty())
 	{
-		std::cout << "Sending notifications..." << std::endl;
+		log << "Sending notifications..." << std::endl;
 		if (!SendNotification(observations))
 			return false;
 	}
 
-	std::cout << "Updating list of previously processed observations..." << std::endl;
+	log << "Updating list of previously processed observations..." << std::endl;
 	UpdateProcessedObservations(previouslyProcessedObservations, observations);
 	if (!WritePreviousObservations(previouslyProcessedObservations))
 		return false;
@@ -68,7 +68,7 @@ bool BirdNotifier::ReadPreviousObservations(std::vector<ReportedObservation>& ob
 	std::ifstream file(config.alreadyNotifiedFile);
 	if (!file.is_open())
 	{
-		std::cerr << "Failed to open '" << config.alreadyNotifiedFile << "' for input\n";
+		log << "Failed to open '" << config.alreadyNotifiedFile << "' for input\n";
 		return false;
 	}
 
@@ -89,13 +89,13 @@ bool BirdNotifier::ParseReportedObservationLine(const std::string& line, Reporte
 	std::istringstream ss(line);
 	if (!std::getline(ss, o.observationId, ','))
 	{
-		std::cerr << "Failed to parse ID from observation line\n";
+		log << "Failed to parse ID from observation line\n";
 		return false;
 	}
 
 	if (!std::getline(ss, o.observationDate, ','))
 	{
-		std::cerr << "Failed to parse date from observation line\n";
+		log << "Failed to parse date from observation line\n";
 		return false;
 	}
 
@@ -174,7 +174,7 @@ bool BirdNotifier::WritePreviousObservations(const std::vector<ReportedObservati
 	std::ofstream file(config.alreadyNotifiedFile);
 	if (!file.is_open())
 	{
-		std::cerr << "Failed to open '" << config.alreadyNotifiedFile << "' for output\n";
+		log << "Failed to open '" << config.alreadyNotifiedFile << "' for output\n";
 		return false;
 	}
 
@@ -190,7 +190,7 @@ bool BirdNotifier::SendNotification(const std::vector<EBirdInterface::Observatio
 	std::vector<EmailSender::AddressInfo> recipients;
 	BuildEmailEssentials(loginInfo, recipients);
 	constexpr bool verbose(false);
-	EmailSender sender("birdNotifier Message", BuildMessageBody(observations), std::string(), recipients, loginInfo, true, verbose, Cout);
+	EmailSender sender("birdNotifier Message", BuildMessageBody(observations), std::string(), recipients, loginInfo, true, verbose, log);
 	return sender.Send();
 }
 

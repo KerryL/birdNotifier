@@ -7,10 +7,13 @@
 #include "birdNotifier.h"
 #include "birdNotifierConfigFile.h"
 #include "email/oAuth2Interface.h"
+#include "logging/logger.h"
+#include "logging/combinedLogger.h"
 
 // Standard C++ headers
 #include <string>
 #include <iostream>
+#include <memory>
 
 static const UString::String oAuthTokenFileName(_T(".oAuthToken"));
 
@@ -84,22 +87,29 @@ bool SetupOAuth2Interface(const EmailConfig& email, UString::OStream& log)
 	return true;
 }
 
+static const UString::String logFileName(_T("birdNotifier.log"));
+
 int main(int argc, char* argv[])
 {
+	UString::OFStream logFile(logFileName);
+	CombinedLogger<UString::OStream> logger;
+	logger.Add(std::make_unique<Logger>(logFile));
+	logger.Add(std::make_unique<Logger>(Cout));
+	
 	if (argc != 2)
 	{
 		PrintUsage(argv[0]);
 		return 1;
 	}
 
-	BirdNotifierConfigFile configFile;
+	BirdNotifierConfigFile configFile(logger);
 	if (!configFile.ReadConfiguration(UString::ToStringType(argv[1])))
 		return 1;
 
-	if (!SetupOAuth2Interface(configFile.GetConfig().emailInfo, Cout))
+	if (!SetupOAuth2Interface(configFile.GetConfig().emailInfo, logger))
 		return 1;
 
-	BirdNotifier birdNotifier(configFile.GetConfig());
+	BirdNotifier birdNotifier(configFile.GetConfig(), logger);
 	if (!birdNotifier.Run())
 		return 1;
 

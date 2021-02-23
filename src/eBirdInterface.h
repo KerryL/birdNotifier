@@ -18,7 +18,7 @@
 class EBirdInterface : public JSONInterface
 {
 public:
-	EBirdInterface(const UString::String& apiKey) : tokenData(apiKey) {}
+	EBirdInterface(const UString::String& apiKey, UString::OStream& log = Cout) : tokenData(apiKey), log(log) {}
 
 	struct ObservationInfo
 	{
@@ -92,7 +92,7 @@ private:
 
 	static const UString::String eBirdTokenHeader;
 
-	static bool ReadJSONObservationData(cJSON* item, ObservationInfo& info);
+	bool ReadJSONObservationData(cJSON* item, ObservationInfo& info);
 
 	struct TokenData : public ModificationData
 	{
@@ -101,6 +101,7 @@ private:
 	};
 
 	const TokenData tokenData;
+	UString::OStream& log;
 
 	static bool AddTokenToCurlHeader(CURL* curl, const ModificationData* data);// Expects TokenData
 
@@ -111,8 +112,8 @@ private:
 		UString::String status;
 	};
 
-	static bool ResponseHasErrors(cJSON *root, std::vector<ErrorInfo>& errors);
-	static void PrintErrorInfo(const std::vector<ErrorInfo>& errors);
+	bool ResponseHasErrors(cJSON *root, std::vector<ErrorInfo>& errors);
+	void PrintErrorInfo(const std::vector<ErrorInfo>& errors);
 };
 
 #endif// EBIRD_INTERFACE_H_

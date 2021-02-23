@@ -66,8 +66,8 @@ bool EBirdInterface::GetRecentNotableObservations(const UString::String& regionC
 	cJSON *root(cJSON_Parse(response.c_str()));
 	if (!root)
 	{
-		Cerr << "Failed to parse returned string (GetRecentNotableObservations())\n";
-		Cerr << response.c_str() << '\n';
+		log << _T("Failed to parse returned string (GetRecentNotableObservations())\n");
+		log << response.c_str() << '\n';
 		return false;
 	}
 
@@ -85,14 +85,14 @@ bool EBirdInterface::GetRecentNotableObservations(const UString::String& regionC
 		cJSON* item(cJSON_GetArrayItem(root, i));
 		if (!item)
 		{
-			Cerr << "Failed to get observation array item\n";
+			log << _T("Failed to get observation array item\n");
 			cJSON_Delete(root);
 			return false;
 		}
 
 		if (!ReadJSONObservationData(item, o))
 		{
-			std::cout << cJSON_Print(root);
+			log << cJSON_Print(root);
 			cJSON_Delete(root);
 			return false;
 		}
@@ -106,38 +106,38 @@ bool EBirdInterface::GetRecentNotableObservations(const UString::String& regionC
 void EBirdInterface::PrintErrorInfo(const std::vector<ErrorInfo>& errors)
 {
 	for (const auto& e : errors)
-		Cout << "Error " << e.code << " : " << e.title << " : " << e.status << std::endl;
+		log << _T("Error ") << e.code << " : " << e.title << " : " << e.status << std::endl;
 }
 
 bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 {
 	if (!ReadJSON(item, speciesCodeTag, info.speciesCode))
 	{
-		Cerr << "Failed to get species code\n";
+		log << _T("Failed to get species code\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, commonNameTag, info.commonName))
 	{
-		Cerr << "Failed to get common name for item\n";
+		log << _T("Failed to get common name for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, scientificNameTag, info.scientificName))
 	{
-		Cerr << "Failed to get scientific name for item\n";
+		log << _T("Failed to get scientific name for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, locationIDTag, info.locationID))
 	{
-		Cerr << "Failed to get location id for item\n";
+		log << _T("Failed to get location id for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, locationNameTag, info.locationName))
 	{
-		Cerr << "Failed to get location name for item\n";
+		log << _T("Failed to get location name for item\n");
 		return false;
 	}
 
@@ -147,14 +147,14 @@ bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 		UString::String dateString;
 		if (!ReadJSON(item, observationDateTag, dateString))
 		{
-			Cerr << "Failed to get observation date and time for item\n";
+			log << _T("Failed to get observation date and time for item\n");
 			return false;
 		}
 
 		UString::IStringStream ss(dateString);
 		if ((ss >> std::get_time(&info.observationDate, _T("%Y-%m-%d"))).fail())
 		{
-			Cerr << "Failed to get observation date for item\n";
+			log << _T("Failed to get observation date for item\n");
 			return false;
 		}
 
@@ -163,7 +163,7 @@ bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 
 	if (!ReadJSON(item, presenceNotedTag, info.presenceNoted))
 	{
-		Cerr << "Failed to read presence noted tag\n";
+		log << _T("Failed to read presence noted tag\n");
 		return false;
 	}
 
@@ -171,63 +171,63 @@ bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 	{
 		if (!ReadJSON(item, howManyTag, info.count))
 		{
-			Cerr << "Failed to get observation count\n";
+			log << _T("Failed to get observation count\n");
 			return false;
 		}
 	}
 
 	if (!ReadJSON(item, latitudeTag, info.latitude))
 	{
-		Cerr << "Failed to get location latitude for item\n";
+		log << _T("Failed to get location latitude for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, longitudeTag, info.longitude))
 	{
-		Cerr << "Failed to get location longitude for item\n";
+		log << _T("Failed to get location longitude for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, isValidTag, info.observationValid))
 	{
-		Cerr << "Failed to get observation valid flag for item\n";
+		log << _T("Failed to get observation valid flag for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, isReviewedTag, info.observationReviewed))
 	{
-		Cerr << "Failed to get observation reviewed flag for item\n";
+		log << _T("Failed to get observation reviewed flag for item\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, locationPrivateTag, info.locationPrivate))
 	{
-		Cerr << "Failed to get location private flag\n";
+		log << _T("Failed to get location private flag\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, submissionIDTag, info.checklistID))
 	{
-		Cerr << "Failed to get submission ID\n";
+		log << _T("Failed to get submission ID\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, userDisplayNameTag, info.userName))
 	{
-		Cerr << "Failed to get user name\n";
+		log << _T("Failed to get user name\n");
 		return false;
 	}
 
 	if (!ReadJSON(item, observationIDTag, info.observationID))
 	{
-		Cerr << "Failed to get observation ID\n";
+		log << _T("Failed to get observation ID\n");
 		return false;
 	}
 
 	bool hasComments;
 	if (!ReadJSON(item, hasCommentsTag, hasComments))
 	{
-		Cerr << "Failed to get has comments flag\n";
+		log << _T("Failed to get has comments flag\n");
 		return false;
 	}
 
@@ -235,14 +235,14 @@ bool EBirdInterface::ReadJSONObservationData(cJSON* item, ObservationInfo& info)
 	{
 		if (!ReadJSON(item, commentsTag, info.comments))
 		{
-			Cerr << "Failed to get comments\n";
+			log << _T("Failed to get comments\n");
 			return false;
 		}
 	}
 
 	if (!ReadJSON(item, hasMediaTag, info.hasMedia))
 	{
-		Cerr << "Failed to get has media flag\n";
+		log << _T("Failed to get has media flag\n");
 		return false;
 	}
 
@@ -256,14 +256,14 @@ bool EBirdInterface::AddTokenToCurlHeader(CURL* curl, const ModificationData* da
 		+ static_cast<const TokenData*>(data)->token)).c_str());
 	if (!headerList)
 	{
-		Cerr << "Failed to append token to header in AddTokenToCurlHeader\n";
+		std::cerr << "Failed to append token to header in AddTokenToCurlHeader\n";
 		return false;
 	}
 
 	headerList = curl_slist_append(headerList, "Content-Type: application/json");
 	if (!headerList)
 	{
-		Cerr << "Failed to append content type to header in ListTables\n";
+		std::cerr << "Failed to append content type to header in ListTables\n";
 		return false;
 	}
 
@@ -287,25 +287,25 @@ bool EBirdInterface::ResponseHasErrors(cJSON *root, std::vector<ErrorInfo>& erro
 		cJSON* item(cJSON_GetArrayItem(errorsNode, i++));
 		if (!item)
 		{
-			Cerr << "Failed to read error " << i << '\n';
+			log << _T("Failed to read error ") << i << '\n';
 			return true;
 		}
 
 		if (!ReadJSON(item, codeTag, e.code))
 		{
-			Cerr << "Failed to read error code\n";
+			log << _T("Failed to read error code\n");
 			break;
 		}
 
 		if (!ReadJSON(item, statusTag, e.status))
 		{
-			Cerr << "Failed to read error status\n";
+			log << _T("Failed to read error status\n");
 			break;
 		}
 
 		if (!ReadJSON(item, titleTag, e.title))
 		{
-			Cerr << "Failed to read error title\n";
+			log << _T("Failed to read error title\n");
 			break;
 		}
 	}

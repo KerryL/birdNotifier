@@ -12,7 +12,8 @@ DIRS = \
 	src \
 	src/email \
     src/email/cJSON \
-	src/utilities
+	src/utilities \
+	src/logging
 
 # Source files
 SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
