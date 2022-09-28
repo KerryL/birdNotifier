@@ -31,6 +31,12 @@
     <Filter Include="Header Files\email\cJSON">
       <UniqueIdentifier>{3a798738-9b88-4596-980b-54dbe51cde33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\logging">
+      <UniqueIdentifier>{4456fdac-62c3-4ad5-8130-a610393ff474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logging">
+      <UniqueIdentifier>{43d27aaa-498c-4192-8c13-6358316b41f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\birdNotifier.cpp">
@@ -72,6 +78,9 @@
     <ClCompile Include="..\src\utilities\cppSocket.cpp">
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\logging\logger.cpp">
+      <Filter>Source Files\logging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\birdNotifier.h">
@@ -112,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="..\src\utilities\cppSocket.h">
       <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\logging\combinedLogger.h">
+      <Filter>Header Files\logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\logging\logger.h">
+      <Filter>Header Files\logging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

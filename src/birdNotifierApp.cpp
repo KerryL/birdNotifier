@@ -35,16 +35,18 @@ bool SetupOAuth2Interface(const EmailConfig& email, UString::OStream& log)
 		OAuth2Interface::Get().SetCACertificatePath(UString::ToStringType(email.caCertificatePath));
 
 	// Originally, this was for windows only, but device access does not
-	// support full access to e-mail.  So the user has some typing to do...
+	// support full access to e-mail (in Google developer docs, allowed
+	// scopes for limited-access device includes "email," but this is only
+	// the ability to "view your email address."  So we are forced to use 
+	// a Desktop-type interface, which means the user has some typing to do...
 #if 1//#ifdef _WIN32
 	OAuth2Interface::Get().SetTokenURL(_T("https://accounts.google.com/o/oauth2/token"));
 	OAuth2Interface::Get().SetAuthenticationURL(_T("https://accounts.google.com/o/oauth2/auth"));
 	OAuth2Interface::Get().SetResponseType(_T("code"));
-	OAuth2Interface::Get().SetRedirectURI(_T("urn:ietf:wg:oauth:2.0:oob"));
+	OAuth2Interface::Get().SetRedirectURI(_T("http://127.0.0.1:9004"));
 	OAuth2Interface::Get().SetLoginHint(UString::ToStringType(email.sender));
 	OAuth2Interface::Get().SetGrantType(_T("authorization_code"));
-	//OAuth2Interface::Get().SetScope(_T("https://www.googleapis.com/auth/gmail.send"));
-	OAuth2Interface::Get().SetScope(_T("https://mail.google.com/"));
+	OAuth2Interface::Get().SetScope(_T("https://www.googleapis.com/auth/gmail.send"));
 #else
 	OAuth2Interface::Get().SetTokenURL(_T("https://www.googleapis.com/oauth2/v3/token"));
 	OAuth2Interface::Get().SetAuthenticationURL(_T("https://accounts.google.com/o/oauth2/device/code"));

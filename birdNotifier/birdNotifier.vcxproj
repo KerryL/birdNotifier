@@ -142,6 +142,7 @@
     <ClCompile Include="..\src\email\emailSender.cpp" />
     <ClCompile Include="..\src\email\jsonInterface.cpp" />
     <ClCompile Include="..\src\email\oAuth2Interface.cpp" />
+    <ClCompile Include="..\src\logging\logger.cpp" />
     <ClCompile Include="..\src\utilities\configFile.cpp" />
     <ClCompile Include="..\src\utilities\cppSocket.cpp" />
     <ClCompile Include="..\src\utilities\uString.cpp" />
@@ -157,6 +158,8 @@
     <ClInclude Include="..\src\email\emailSender.h" />
     <ClInclude Include="..\src\email\jsonInterface.h" />
     <ClInclude Include="..\src\email\oAuth2Interface.h" />
+    <ClInclude Include="..\src\logging\combinedLogger.h" />
+    <ClInclude Include="..\src\logging\logger.h" />
     <ClInclude Include="..\src\utilities\configFile.h" />
     <ClInclude Include="..\src\utilities\cppSocket.h" />
     <ClInclude Include="..\src\utilities\uString.h" />

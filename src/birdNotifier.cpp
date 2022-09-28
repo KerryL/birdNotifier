@@ -68,7 +68,7 @@ bool BirdNotifier::ReadPreviousObservations(std::vector<ReportedObservation>& ob
 	std::ifstream file(config.alreadyNotifiedFile);
 	if (!file.is_open())
 	{
-		log << "Failed to open '" << config.alreadyNotifiedFile << "' for input\n";
+		log << "Failed to open '" << UString::ToStringType(config.alreadyNotifiedFile) << "' for input\n";
 		return false;
 	}
 
@@ -174,7 +174,7 @@ bool BirdNotifier::WritePreviousObservations(const std::vector<ReportedObservati
 	std::ofstream file(config.alreadyNotifiedFile);
 	if (!file.is_open())
 	{
-		log << "Failed to open '" << config.alreadyNotifiedFile << "' for output\n";
+		log << "Failed to open '" << UString::ToStringType(config.alreadyNotifiedFile) << "' for output\n";
 		return false;
 	}
 
@@ -191,7 +191,7 @@ bool BirdNotifier::SendNotification(const std::vector<EBirdInterface::Observatio
 	BuildEmailEssentials(loginInfo, recipients);
 	constexpr bool verbose(false);
 	EmailSender sender("birdNotifier Message", BuildMessageBody(observations), std::string(), recipients, loginInfo, true, verbose, log);
-	return sender.Send();
+	return sender.SendREST();
 }
 
 std::string BirdNotifier::BuildMessageBody(const std::vector<EBirdInterface::ObservationInfo>& observations)
@@ -212,7 +212,7 @@ std::string BirdNotifier::BuildMessageBody(const std::vector<EBirdInterface::Obs
 
 void BirdNotifier::BuildEmailEssentials(EmailSender::LoginInfo& loginInfo, std::vector<EmailSender::AddressInfo>& recipients)
 {
-	loginInfo.smtpUrl = "smtp.gmail.com:587";
+	loginInfo.smtpUrl = std::string("https://gmail.googleapis.com/gmail/v1/users/me/messages/send?alt=json");
 	loginInfo.localEmail = config.emailInfo.sender;
 	loginInfo.oAuth2Token = UString::ToNarrowString(OAuth2Interface::Get().GetRefreshToken());
 	loginInfo.useSSL = true;
